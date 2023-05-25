@@ -7,7 +7,7 @@ import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import XYZ from 'ol/source/XYZ'
-import { LineString, Point } from 'ol/geom'
+import { LineString, Point, SimpleGeometry } from 'ol/geom'
 import { fromLonLat } from 'ol/proj'
 import { Feature } from 'ol';
 import Style from 'ol/style/Style';
@@ -18,6 +18,7 @@ function NatureTrailsMap(props: { coordinates: Array<Array<Number>> }) {
 
     const [ map, setMap ] = useState<Map|null>(null)
     const [ featuresLayer, setFeaturesLayer ] = useState<VectorLayer<VectorSource>|null>(null)
+    const [ view, setView ] = useState<View|null>(null)
 
     const mapElement = useRef()
     const mapRef = useRef(map)
@@ -30,6 +31,12 @@ function NatureTrailsMap(props: { coordinates: Array<Array<Number>> }) {
             style: new Style({
                 stroke: new Stroke({color: '#f00'})
             })
+        })
+
+        const initialView = new View({
+            projection: 'EPSG:3857',
+            center: [2780000, 8450000],
+            zoom: 10
         })
 
         const initialMap = new Map({
@@ -45,19 +52,17 @@ function NatureTrailsMap(props: { coordinates: Array<Array<Number>> }) {
                 initialFeaturesLayer
 
             ],
-            view: new View({
-                projection: 'EPSG:3857',
-                center: [2780000, 8450000],
-                zoom: 10
-            }),
+            view: initialView,
             controls: []
         })
 
         setMap(initialMap)
         setFeaturesLayer(initialFeaturesLayer)
+        setView(initialView)
 
     },[])
 
+    // Handle setSelectedTrail
     useEffect(() => {
         const points = [] as Array<Coordinate>
         props.coordinates.forEach(coordinate => {
@@ -70,6 +75,7 @@ function NatureTrailsMap(props: { coordinates: Array<Array<Number>> }) {
         const vectorLine = new VectorSource()
         vectorLine.addFeature(featureLine)
         featuresLayer?.setSource(vectorLine)
+        view?.fit(featureLine.getGeometry() as SimpleGeometry)
     }, [props.coordinates])
 
     return (      
