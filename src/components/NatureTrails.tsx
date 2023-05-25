@@ -7,7 +7,7 @@ const NatureTrails = () => {
 
     const [natureTrailsData, setNatureTrailsData] = useState([])
 
-    const [selectedTrail, setSelectedTrail] = useState([])
+    const [selectedTrail, setSelectedTrail] = useState<Array<Array<Number>>>([])
 
     const selectTrail = (value: Array<Array<Number>>) => {
         setSelectedTrail(value)

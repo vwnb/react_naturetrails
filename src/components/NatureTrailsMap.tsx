@@ -20,8 +20,8 @@ function NatureTrailsMap(props: { coordinates: Array<Array<Number>> }) {
     const [ featuresLayer, setFeaturesLayer ] = useState<VectorLayer<VectorSource>|null>(null)
     const [ view, setView ] = useState<View|null>(null)
 
-    const mapElement = useRef()
-    const mapRef = useRef(map)
+    const mapElement = useRef<HTMLDivElement|null>(null)
+    const mapRef = useRef<Map|null>(map)
     mapRef.current = map
 
     useEffect( () => {
@@ -40,7 +40,7 @@ function NatureTrailsMap(props: { coordinates: Array<Array<Number>> }) {
         })
 
         const initialMap = new Map({
-            target: mapElement.current,
+            target: mapElement.current as HTMLElement,
             layers: [
 
                 new TileLayer({
