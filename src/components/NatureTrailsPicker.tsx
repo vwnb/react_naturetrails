@@ -5,7 +5,9 @@ import NatureTrailsData from '../classes/NatureTrailsData'
 const NatureTrails = (props: { natureTrailsData: NatureTrailsData[], selectTrail: Function }) => {
 
     const natureTrails = props.natureTrailsData.map((natureTrail, index) => {
-        return <option key={index} value={index}>{natureTrail.title}</option>
+        if (natureTrail.routes.features) {
+            return <option key={index} value={index}>{natureTrail.title}</option>
+        }
     })
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
